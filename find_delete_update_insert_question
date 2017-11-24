@@ -1,0 +1,41 @@
+
+
+
+
+		search
+		$old_questions_id=array();
+              foreach ($job_questions_list as $key => $value) {
+                    $old_questions_id[]=$value['rjq_recruiter_jobs_questionnaire_id'];
+              }
+              $new_questions_id=array();
+              foreach ($postadata['old_questions'] as $key => $value) {
+                $new_questions_id[]=$key;
+              }
+              $remove_ids=array_diff($old_questions_id,$new_questions_id);  
+		
+		update
+              foreach ($postadata['old_questions'] as $key => $value) {
+                      $update_question=array(
+                          "questionnaire_id"=>$key,
+                          "question"=>$value
+                      );
+                 $job_update = $this->cit_api_model->callAPI('questionaire_edit',$update_question);
+              }
+		
+		//delete
+              foreach ($remove_ids as $key => $value) {
+                  $delete_question= array('questionnaire_id' => $value);
+                  $job_delete = $this->cit_api_model->callAPI('questionaire_delete',$delete_question);
+              }
+	
+		//insert
+              foreach ($postadata['questions'] as $key => $value) {
+                  $input_question_params=array();
+                  $input_question_params['recruiter_job_id'] = $input_params['job_id']  ;
+                  $input_question_params['question'] = $value;
+                  $res_id = $this->cit_api_model->callAPI('questionaire_add',$input_question_params);
+              }
+
+
+
+
