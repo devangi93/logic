@@ -1,0 +1,11 @@
+$record_limit = 20;
+            $current_page = intval($page_index) > 0 ? intval($page_index) : 1;
+            $total_pages = getTotalPages($total_records, $record_limit);
+            $start_index = getStartIndex($total_records, $current_page, $record_limit);
+            $settings_params['per_page'] = $record_limit;
+            $settings_params['curr_page'] = $current_page;
+            $settings_params['prev_page'] = ($current_page > 1) ? 1 : 0;
+            $settings_params['next_page'] = ($current_page+1 > $total_pages) ? 0 : 1;
+
+            $this->db->limit($record_limit, $start_index);
+            $result_obj = $this->db->get();
